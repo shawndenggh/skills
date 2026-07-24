@@ -94,6 +94,109 @@ npx skills remove <skill-name>
 See the [`skills` CLI documentation](https://www.skills.sh/docs/cli) for
 agent-specific and non-interactive options.
 
+## Skill Usage Examples and Expected Results
+
+These skills are interactive workflows rather than one-shot generators. The
+agent investigates facts it can discover, asks for one decision at a time, and
+waits for approval at the workflow's explicit gates.
+
+### `writing-prd`
+
+Use [`writing-prd`](skills/writing-prd/) when a product idea needs a clear MVP
+boundary and a reviewable product requirements document.
+
+Example prompt:
+
+```text
+Use $writing-prd to turn our customer request for passwordless sign-in into a
+focused MVP PRD. Save it under docs/product/. Email magic links are in scope;
+social login and account recovery are not.
+```
+
+The skill interviews the product owner chapter by chapter, confirms the problem
+and scope before adding detail, and keeps implementation choices out of the
+product requirements. During the workflow, expect focused questions such as:
+
+```text
+Recommendation: expire each sign-in link after its first successful use so a
+forwarded or reopened link cannot create another session. The trade-off is that
+users must request a new link after using it once. Should this be the MVP rule?
+```
+
+Expected result:
+
+- A focused PRD, normally at `docs/product/<feature>-prd.md`.
+- Confirmed users, goals, scope, non-goals, flows, business rules, and release
+  expectations expressed in product language.
+- Traceable `US-*`, `FR-*`, `BR-*`, and `AC-*` identifiers.
+- Deferred ideas recorded as non-goals or follow-ups, with genuine blockers
+  left visibly open instead of silently assumed.
+
+An abbreviated output might look like:
+
+```markdown
+# Passwordless Sign-In PRD
+
+## Scope and Non-Goals
+- In scope: request and use a single-use email sign-in link.
+- Out of scope: social login and account recovery.
+
+## Functional Requirements
+- FR-1: A registered user can request a sign-in link for their email.
+
+## Acceptance Criteria
+- AC-1: Given a valid unused link, the user can sign in once.
+- AC-2: A used or expired link does not sign the user in.
+```
+
+### `ready-development`
+
+Use [`ready-development`](skills/ready-development/) when the product boundary
+is stable and engineering needs an approved technical design plus an executable
+Issue sequence before implementation begins.
+
+Example prompt:
+
+```text
+Use $ready-development with docs/product/passwordless-sign-in-prd.md. Ground the
+design in the current repository, write it under docs/design/, and prepare
+independently reviewable GitHub Issue drafts. Do not implement production code.
+```
+
+The skill traces current modules, contracts, data ownership, failure paths, and
+test seams in the repository. It then resolves the design chapter by chapter,
+asking for approval on one consequential choice at a time. After the complete
+technical design is approved, it proposes an ordered Issue plan and asks before
+publishing anything to a tracker.
+
+Expected result:
+
+- A codebase-grounded technical design at the repository's chosen design path,
+  covering ownership, interfaces, flows, data, security, operations, rollout,
+  rollback, and tests where applicable.
+- An evidence and decision trail that distinguishes confirmed choices,
+  assumptions, open questions, and out-of-scope work.
+- Requirement-to-design and requirement-to-test traceability.
+- Ordered, dependency-aware Issue drafts sized as independently testable,
+  reviewable, deployable, and reversible vertical slices.
+- Published tracker Issues only after explicit approval and successful
+  read-back; otherwise, saved Issue drafts.
+- No production implementation, implementation commit, or pull request.
+
+An abbreviated handoff might look like:
+
+```text
+Technical design: docs/design/passwordless-sign-in.md
+
+Issue plan:
+1. Define the single-use token contract and public behavior tests
+2. Persist token lifecycle and enforce atomic consumption (depends on 1)
+3. Add the sign-in endpoint and operational telemetry (depends on 2)
+
+First unblocked Issue: 1
+Implementation started: no
+```
+
 ## Repository Structure
 
 ```text
