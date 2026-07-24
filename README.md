@@ -23,10 +23,10 @@ explicitly supported target.
 
 ## Available Skills
 
-_No published skills yet._
-
-Skills will appear here after they pass repository validation and a realistic
-usage check.
+| Skill | Purpose |
+| --- | --- |
+| [ready-development](skills/ready-development/) | Turn requirements into approved technical designs and reviewable implementation Issues. |
+| [writing-prd](skills/writing-prd/) | Clarify product decisions and write focused PRDs. |
 
 ## Install a Skill
 
