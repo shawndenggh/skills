@@ -1,6 +1,6 @@
 <div align="center">
 
-# Personal Skills
+# Agent-Ready Skills
 
 **Turn coding experience into agent-ready skills.**
 
