@@ -2,7 +2,7 @@
 
 # Personal Skills
 
-**A curated collection of reusable AI workflows, domain knowledge, and automations**
+**Turn coding experience into agent-ready skills.**
 
 Built for practical work with coding agents — concise instructions, focused context,
 and repeatable results.
