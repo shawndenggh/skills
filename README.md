@@ -2,133 +2,142 @@
 
 # Agent-Ready Skills
 
-**Turn coding experience into agent-ready skills.**
-
-Built for practical work with coding agents — concise instructions, focused context,
-and repeatable results.
+**Turn repeatable workflows into portable skills for coding agents.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Skills](https://img.shields.io/badge/collection-personal%20skills-6f42c1.svg)](skills/)
-[![Format](https://img.shields.io/badge/format-SKILL.md-2563eb.svg)](templates/skill/SKILL.md)
+[![Format](https://img.shields.io/badge/format-Agent%20Skills-2563eb.svg)](https://agentskills.io)
 [![Status](https://img.shields.io/badge/status-growing-22c55e.svg)](#available-skills)
 
 </div>
 
-## Contents
-
-- [What This Is](#what-this-is)
-- [Available Skills](#available-skills)
-- [Repository Structure](#repository-structure)
-- [Skill Format](#skill-format)
-- [How to Add a Skill](#how-to-add-a-skill)
-- [Design Principles](#design-principles)
-- [Validation Checklist](#validation-checklist)
-- [License](#license)
-
 ## What This Is
 
-This repository is my personal library of AI skills. Each skill captures a focused
-workflow that an agent can apply repeatedly without rediscovering the same project
-context, preferences, or operating rules.
+This repository is a personal collection of reusable workflows for AI coding
+agents. Each published skill follows the open
+[Agent Skills specification](https://agentskills.io/specification) and keeps its
+instructions, scripts, references, and assets in one self-contained directory.
 
-The collection will cover areas such as:
-
-- Development and code review
-- DevOps, deployment, and diagnostics
-- Writing and content publishing
-- Personal productivity and automation
-- Project- and domain-specific knowledge
-
-The goal is not to collect generic prompt snippets. A useful skill should give an
-agent enough context to make better decisions, follow a reliable workflow, and verify
-the result.
+The collection is designed to work across compatible agents. Codex is an
+explicitly supported target.
 
 ## Available Skills
 
-Skills will be added here as they become ready for reuse.
+_No published skills yet._
 
-| Skill | Category | Description |
-|-------|----------|-------------|
-| _Coming soon_ | — | The first personal skills are being organized. |
+Skills will appear here after they pass repository validation and a realistic
+usage check.
+
+## Install a Skill
+
+### Requirements
+
+- Node.js 18 or newer
+- An Agent Skills-compatible coding agent
+
+First, list the skills available in this repository:
+
+```bash
+npx skills add shawndenggh/skills --list
+```
+
+Before installing a skill, review its `SKILL.md` and any bundled scripts. Skills
+run with the permissions available to your agent.
+
+Install one skill into the current project:
+
+```bash
+npx skills add shawndenggh/skills --skill <skill-name>
+```
+
+To target Codex explicitly:
+
+```bash
+npx skills add shawndenggh/skills --skill <skill-name> --agent codex
+```
+
+A project installation writes agent files under the current project and creates
+a `skills-lock.json` file. For Codex, the skill is installed under
+`.agents/skills/`.
+
+To make a skill available across projects, use a global installation:
+
+```bash
+npx skills add shawndenggh/skills --skill <skill-name> --global
+```
+
+Project-scoped installation is recommended by default because it keeps the
+trusted skill set explicit for each codebase.
+
+## Use and Manage Skills
+
+Invoke a skill explicitly by mentioning it in your prompt:
+
+```text
+Use $skill-name to ...
+```
+
+Compatible agents may also select a skill automatically when the request matches
+the skill's description.
+
+```bash
+# List installed skills
+npx skills list
+
+# Update one installed skill
+npx skills update <skill-name>
+
+# Remove one installed skill
+npx skills remove <skill-name>
+```
+
+See the [`skills` CLI documentation](https://www.skills.sh/docs/cli) for
+agent-specific and non-interactive options.
 
 ## Repository Structure
 
 ```text
 .
+├── .github/workflows/       # Continuous validation
 ├── skills/
 │   └── <skill-name>/
-│       ├── SKILL.md     # Required instructions and metadata
-│       ├── agents/      # Optional agent UI metadata
-│       ├── scripts/     # Optional executable scripts
-│       ├── references/  # Optional on-demand reference material
-│       └── assets/      # Optional templates and other assets
-├── templates/
-│   └── skill/
-│       └── SKILL.md     # Starter template for a new skill
-├── LICENSE
-└── README.md
+│       ├── SKILL.md         # Required metadata and instructions
+│       ├── agents/          # Optional agent-specific UI metadata
+│       ├── scripts/         # Optional deterministic helpers
+│       ├── references/      # Optional on-demand documentation
+│       └── assets/          # Optional output resources
+├── scripts/                 # Repository authoring and validation tools
+├── templates/skill/
+│   └── SKILL.md.template    # Non-discoverable starter template
+├── tests/                   # Tests for repository tooling
+├── AGENTS.md
+├── CONTRIBUTING.md
+└── LICENSE
 ```
 
-## Skill Format
+## Contributing
 
-Every skill lives in its own directory and must include a `SKILL.md` file with YAML
-frontmatter:
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before creating or changing a skill.
+The short version is:
 
-```markdown
----
-name: example-skill
-description: Describe what this skill does and when it should be used.
----
-
-# Example Skill
-
-## Workflow
-
-1. Inspect the relevant context.
-2. Perform the task using the preferred workflow.
-3. Verify the result and report remaining risks.
+```bash
+npm run new:skill -- <skill-name>
+# Complete the generated SKILL.md and update the catalog above.
+npm test
+npm run validate
 ```
 
-Keep the core instructions in `SKILL.md`. Move large or low-frequency material into
-`references/`, and use `scripts/` for deterministic operations that should not be
-rewritten by an agent each time.
-
-## How to Add a Skill
-
-1. Create a directory under `skills/` using lowercase letters, numbers, and hyphens.
-2. Start from [`templates/skill/SKILL.md`](templates/skill/SKILL.md).
-3. Define a precise `name` and a trigger-oriented `description`.
-4. Document the workflow, decision points, safety rules, and verification steps.
-5. Add references, scripts, or assets only when they directly support the skill.
-6. Test the skill against a realistic task before committing it.
-7. Add the skill to the table above with its category and a short description.
-
-## Design Principles
-
-- **Concise** — preserve context by documenting only what the agent needs.
-- **Actionable** — prefer clear steps, conditions, examples, and checks.
-- **Progressive** — keep the common path in `SKILL.md`; load details on demand.
-- **Reusable** — capture stable workflows instead of one-off answers.
-- **Honest** — document limitations and uncertainty rather than making broad claims.
-- **Safe** — define confirmation and rollback boundaries for external or destructive actions.
-
-## Validation Checklist
-
-Before publishing a skill, check that:
-
-- `SKILL.md` has valid `name` and `description` frontmatter.
-- The directory name uses lowercase letters, numbers, and hyphens only.
-- The instructions are specific enough to trigger and execute reliably.
-- External actions, secrets, and destructive operations have explicit guardrails.
-- Examples and scripts work from a clean checkout.
-- The skill does not duplicate information already available in the agent.
+Keep each skill focused. Put trigger conditions in the frontmatter description,
+keep the common workflow in `SKILL.md`, and add resource directories only when
+they directly support the workflow.
 
 ## License
 
-Unless otherwise noted, this repository is licensed under the [MIT License](LICENSE).
+Unless otherwise noted, this repository is licensed under the
+[MIT License](LICENSE).
 
 <div align="center">
 
-**Personal knowledge, packaged for repeatable AI work.**
+**Personal knowledge, packaged for repeatable agent work.**
 
 </div>

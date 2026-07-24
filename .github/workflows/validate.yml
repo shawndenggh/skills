@@ -1,0 +1,42 @@
+name: Validate skills
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Test repository tooling
+        run: npm test
+
+      - name: Validate skill collection
+        run: npm run validate
+
+      - name: Verify skills CLI discovery
+        shell: bash
+        run: |
+          first_skill="$(find skills -mindepth 2 -maxdepth 2 -name SKILL.md -print -quit)"
+          if [[ -n "$first_skill" ]]; then
+            npx -y skills@1.5.9 add . --list
+          else
+            echo "No published skills yet; skipping CLI discovery."
+          fi
+
+      - name: Check whitespace errors
+        run: git diff --check

@@ -1,0 +1,19 @@
+---
+name: {{SKILL_NAME}}
+description: "{{SKILL_DESCRIPTION}}"
+---
+
+# {{SKILL_TITLE}}
+
+## Workflow
+
+1. Inspect the task and the relevant source material.
+2. Apply the skill-specific workflow.
+3. Verify the result and report remaining risks.
+
+## Rules
+
+- Keep the workflow focused on this skill's responsibility.
+- Load bundled references only when they are relevant.
+- Run bundled scripts instead of recreating deterministic operations.
+- Confirm before performing irreversible or external actions.
