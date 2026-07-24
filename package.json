@@ -1,0 +1,15 @@
+{
+  "name": "agent-ready-skills",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Authoring and validation tools for a personal Agent Skills collection.",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "new:skill": "node scripts/new-skill.mjs",
+    "test": "node --test",
+    "validate": "node scripts/validate-skills.mjs"
+  }
+}
